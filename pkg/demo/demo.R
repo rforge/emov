@@ -2,10 +2,15 @@ emov_demo <- function() {
 
     raw <- read.csv(file="data/sample.txt", head=TRUE, sep=",")
     
+    raw$x = filter(raw$x, rep(1/3, 3))
+    raw$y = filter(raw$y, rep(1/3, 3))
+
+
     fixations = idt(raw$x, raw$y, 1, 20)
 
     # plot
-    # for sublots: par(mfrow = c(2, 1))
+    # for sublots:
+   #par(mfrow = c(2, 2))
     #postscript(file="testplot.eps",
     #    paper="special",
     #    width=3.5,

@@ -25,29 +25,31 @@ idt <- function(x, y, dispersion, duration) {
 	x_win <- x[start:end]
         y_win <- y[start:end]
         # dispersion
-        D <- (max(x_win) - min(x_win)) + (max(y_win) - min(y_win))
+
+        D <- (max(x_win, na.rm=T) - min(x_win, na.rm=T)) + (max(y_win, na.rm=T) - min(y_win, na.rm=T))
 
         j <- 1  # window expander
+
         while (D <= dispersion & end + j <= length(x)) {
             # expand window by 1 using j
             x_win <- x[start:(end + j)]
             y_win <- y[start:(end + j)]
-            D <- (max(x_win) - min(x_win)) + (max(y_win) - min(y_win))
+            D <- (max(x_win, na.rm=T) - min(x_win ,na.rm=T)) + (max(y_win ,na.rm=T) - min(y_win, na.rm=T))
 
             if (D > dispersion) {
                 # select window as fixation
                 fix_start <- c(fix_start, start)
                 fix_end <- c(fix_end, end + j - 1)
-                fix_x <- c(fix_x, mean(x_win))
-                fix_y <- c(fix_y, mean(y_win))
+                fix_x <- c(fix_x, mean(x_win,na.rm=T))
+                fix_y <- c(fix_y, mean(y_win,na.rm=T))
                 start <- end + j - 1;  # skip window points
                 break
             } else if (end + j == length(x)) {
                 # handle last window if data ends during a fixation
                 fix_start <- c(fix_start, start)
                 fix_end <- c(fix_end, end)
-                fix_x <- c(fix_x, mean(x_win))
-                fix_y <- c(fix_y, mean(y_win))
+                fix_x <- c(fix_x, mean(x_win,na.rm=T))
+                fix_y <- c(fix_y, mean(y_win,na.rm=T))
                 break
             }            
             j <- j + 1
