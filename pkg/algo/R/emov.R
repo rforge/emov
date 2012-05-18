@@ -8,7 +8,7 @@
 # Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades
 # in eye-tracking protocols. In Proceedings of the 2000 symposium on eye
 # tracking research & applications (pp. 71-78). New York: ACM.
-idt <- function(x, y, dispersion, duration) {
+emov.idt <- function(x, y, dispersion, duration) {
 
     # init variables
     fix_start <- c()
@@ -62,4 +62,8 @@ idt <- function(x, y, dispersion, duration) {
     result <- data.frame(start=fix_start, end=fix_end, x=fix_x, y=fix_y)
     return(result)
 
+}
+
+emov.read_smisamples <- function() {
+  print('hi')
 }
