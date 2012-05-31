@@ -27,7 +27,7 @@ fix = list()
 for (i in 1:n) {
   fix[[i]] = emov.idt(data$x[idx$start[i]:idx$end[i]],
                       data$y[idx$start[i]:idx$end[i]],
-                      15, 100/1000*200)
+                      16, 80/1000*200)
 }
 
 # Plot all trials, raw data and fixations

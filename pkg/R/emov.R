@@ -59,7 +59,11 @@ emov.idt <- function(x, y, dispersion, duration) {
 
     }
 
-    result <- data.frame(start=fix_start, end=fix_end, x=fix_x, y=fix_y)
+    result <- data.frame(start=fix_start,
+                         end=fix_end,
+                         x=fix_x,
+                         y=fix_y,
+                         dur=fix_end-fix_start)
     return(result)
 
 }
