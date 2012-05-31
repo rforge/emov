@@ -65,22 +65,14 @@ emov.idt <- function(x, y, dispersion, duration) {
 }
 
 emov.read_iviewsamples <- function(file, nr_of_headerlines) {
+  
   data = read.table(file, header=TRUE, skip=nr_of_headerlines, sep="\t")
+  
+  # handle missing data
   data$L.Raw.X..px.[data$L.Raw.X..px. == 0] = NA
   data$L.Raw.Y..px.[data$L.Raw.Y..px. == 0] = NA
   data$L.POR.X..mm.[data$L.POR.X..mm. == 0] = NA
   data$L.POR.Y..mm.[data$L.POR.Y..mm. == 0] = NA  
-  
-  plot(data$L.Raw.X..px., data$L.Raw.Y..px., type="l", xlim=c(120,220),  ylim=c(130,200))
-  plot(data$L.POR.X..mm., data$L.POR.Y..mm., type="l", xlim=c(0,800),  ylim=c(200,700))
-  
-  plot(data$L.Raw.X..px.[1:2000], -data$L.Raw.Y..px.[1:2000], type="l", xlim=c(120,220),  ylim=c(-130,-200))
-  plot(data$L.Raw.X..px.[4000:6000], data$L.Raw.Y..px.[4000:6000], type="l", xlim=c(120,220),  ylim=c(130,200))
-  plot(data$L.Raw.X..px.[22000:24000], data$L.Raw.Y..px.[22000:24000], type="l", xlim=c(120,220),  ylim=c(130,200))
-  
-  par(new=T)
-  plot(67,99, col="red", xlim=c(0,800),  ylim=c(200,700))
-  xlim=c(120,220)
-  ylim=c(130,200)
+
   return(data)
 }
