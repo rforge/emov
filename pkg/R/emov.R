@@ -70,23 +70,36 @@ emov.idt <- function(x, y, dispersion, duration) {
 
 emov.read_iviewsamples <- function(file, nr_of_headerlines) {
   
-  data = read.table(file, header=TRUE, skip=nr_of_headerlines, sep="\t")
+  return(read.table(file, header=TRUE, skip=nr_of_headerlines, sep="\t"))
   
-  # handle missing data
-  data$L.Raw.X..px.[data$L.Raw.X..px. == 0] = NA
-  data$L.Raw.Y..px.[data$L.Raw.Y..px. == 0] = NA
-  data$L.POR.X..mm.[data$L.POR.X..mm. == 0] = NA
-  data$L.POR.Y..mm.[data$L.POR.Y..mm. == 0] = NA  
-
-  return(data)
 }
 
 emov.cart2sphere <- function(x, y, z) {
   
   srootssxy = sqrt(abs(x)^2 + abs(y)^2)
   r = sqrt(abs(srootssxy)^2 + abs(z)^2)
-  elev = atan2(data$L.GVEC.Z,srootssxy);
-  az = atan2(data$L.GVEC.Y,data$L.GVEC.X);
+  elev = atan2(z, srootssxy);
+  az = atan2(y, x);
+  
+  return(data.frame(az, elev, r))
   
 }
+
+emov.filter <- function(x, y, threshold) {
   
+  idx = diff(abs(x)) > threshold | diff(abs(y)) > threshold  
+  x[idx] = NA
+  y[idx] = NA
+  x[idx + 1] = NA
+  y[idx + 1] = NA
+  print(sprintf("Filtered %.0f percent of data",
+                sum(idx, na.rm=TRUE)/length(x)*100))
+  return(data.frame(x=x, y=y))
+  
+}
+
+emov.angdia <- function(stimsize, distance) {
+  
+  return(deg(2*atan((0.5*stimsize)/distance)))
+  
+}

@@ -4,18 +4,30 @@
 setwd("~/dev/emov/pkg/R")
 source("emov.R")
 
+# read raw data file
 data = emov.read_iviewsamples(
   "/home/simon/Data/nscenes/natural_scenes_samples.txt", 46)
 
-# select the data
-# raw data
-data = data.frame(x = -data$L.Raw.X..px, y = -data$L.Raw.Y..px)
+# handle missing data: Iview has 0 for missing data
+data$L.Raw.X..px.[data$L.Raw.X..px. == 0] = NA
+data$L.Raw.Y..px.[data$L.Raw.Y..px. == 0] = NA
+data$L.POR.X..mm.[data$L.POR.X..mm. == 0] = NA
+data$L.POR.Y..mm.[data$L.POR.Y..mm. == 0] = NA
+data$L.GVEC.X[data$L.GVEC.X == 0] = NA
+data$L.GVEC.Y[data$L.GVEC.Y == 0] = NA
+data$L.GVEC.Z[data$L.GVEC.Z == 0] = NA
+
+# select channels to use
+data = data.frame(x = data$L.POR.X..mm, y = -data$L.POR.Y..mm)
+
+# filter data
+data = emov.filter(data$x, data$y, 10500/200)
 
 # cart2sphere
-srootssxy = sqrt(abs(data$L.GVEC.X)^2 + abs(data$L.GVEC.Y)^2)
-r = sqrt(abs(srootssxy)^2 + abs(data$L.GVEC.Z)^2)
-elev = atan2(data$L.GVEC.Z,srootssxy);
-az = atan2(data$L.GVEC.Y,data$L.GVEC.X);
+#data = emov.cart2sphere(data$L.GVEC.X, data$L.GVEC.Y, data$L.GVEC.Z)
+# rad2deg and 
+#library("circular")
+#data = data.frame(x=deg(data$az), y=-deg(data$elev))
 
 # trial segmentation
 n = 12 # number of trials
@@ -29,33 +41,39 @@ idx <- matrix(idx, nrow=n, ncol=2, byrow=TRUE)
 idx <- data.frame(start=idx[,1], end=idx[,2]) # easy to access
 
 # fixation detecton for each trial
+disp  = 2.8*10 # in cm, 2.8 cm (2 deg)
 fix = list()
 for (i in 1:n) {
   fix[[i]] = emov.idt(data$x[idx$start[i]:idx$end[i]],
                       data$y[idx$start[i]:idx$end[i]],
-                      16, 80/1000*200)
+                      disp, 80/1000*200)
 }
 
 # Plot all trials, raw data and fixations
+#my_xlim = c(-35, 25)
+#my_ylim = c(-20, 15)
+my_xlim = c(0, 770)
+my_ylim = c(-640, -250)
+
 par(mfcol=c(4,3))
 for (i in 1:n) {  
   plot(data$x[idx$start[i]:idx$end[i]],
        data$y[idx$start[i]:idx$end[i]],
-       type="l", xlim=c(-220,-125),  ylim=c(-200,-130),
+       type="l", xlim=my_xlim,  ylim=my_ylim,
        xlab="Horizontal (px)", ylab="Vertical (px)")
   par(new=TRUE)
-  plot(fix[[i]]$x, fix[[i]]$y, xlim=c(-220,-125),  ylim=c(-200,-130), 
-       xlab=NA, ylab=NA)
+  plot(fix[[i]]$x, fix[[i]]$y, xlim=my_xlim, ylim=my_ylim, xlab=NA, ylab=NA)
 }
+
 # Plot single trial
 par(mfcol=c(1,1))
 nr = 1
 plot(data$x[idx$start[nr]:idx$end[nr]],
      data$y[idx$start[nr]:idx$end[nr]],
-     type="l", xlim=c(-220,-125),  ylim=c(-200,-130),
+     type="l", xlim=my_xlim,  ylim=my_ylim,
      xlab="Horizontal (px)", ylab="Vertical (px)")
 par(new=TRUE)
-plot(fix[[nr]]$x, fix[[nr]]$y, xlim=c(-220,-125),  ylim=c(-200,-130), 
+plot(fix[[nr]]$x, fix[[nr]]$y, xlim=my_xlim,  ylim=my_ylim, 
      xlab=NA, ylab=NA)
 
 # Plot stimuli
