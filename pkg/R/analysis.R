@@ -11,6 +11,12 @@ data = emov.read_iviewsamples(
 # raw data
 data = data.frame(x = -data$L.Raw.X..px, y = -data$L.Raw.Y..px)
 
+# cart2sphere
+srootssxy = sqrt(abs(data$L.GVEC.X)^2 + abs(data$L.GVEC.Y)^2)
+r = sqrt(abs(srootssxy)^2 + abs(data$L.GVEC.Z)^2)
+elev = atan2(data$L.GVEC.Z,srootssxy);
+az = atan2(data$L.GVEC.Y,data$L.GVEC.X);
+
 # trial segmentation
 n = 12 # number of trials
 idx = c() # index

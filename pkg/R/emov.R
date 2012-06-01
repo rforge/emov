@@ -80,3 +80,13 @@ emov.read_iviewsamples <- function(file, nr_of_headerlines) {
 
   return(data)
 }
+
+emov.cart2sphere <- function(x, y, z) {
+  
+  srootssxy = sqrt(abs(x)^2 + abs(y)^2)
+  r = sqrt(abs(srootssxy)^2 + abs(z)^2)
+  elev = atan2(data$L.GVEC.Z,srootssxy);
+  az = atan2(data$L.GVEC.Y,data$L.GVEC.X);
+  
+}
+  
