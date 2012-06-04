@@ -1,5 +1,6 @@
 # sample analysis of eye movement data using emov in R
 # by Simon Schwab
+library(calibrate) # textxy
 
 setwd("~/dev/emov/pkg/R")
 source("emov.R")
@@ -27,8 +28,6 @@ flt = emov.filter(data$x, data$y, 10500/200)
 data$x = flt$x
 data$y = flt$y
 
-
-
 # cart2sphere
 #data = emov.cart2sphere(data$L.GVEC.X, data$L.GVEC.Y, data$L.GVEC.Z)
 #data = data.frame(x=deg(data$az), y=-deg(data$elev))
@@ -49,41 +48,55 @@ max_disp  = 19.0 # in cm, 28.8 cm (2 deg)
 min_dur =  80/1000*200
 fix = emov.idt(data$t, data$x, data$y, max_disp, min_dur)
 
-#fix = list()
-#for (i in 1:n) {
-#  fix[[i]] = emov.idt(data$x[idx$start[i]:idx$end[i]],
-                      #data$y[idx$start[i]:idx$end[i]],
-                      #disp, 80/1000*200)
-#}
-
-
+# fixation segmentation for easy ploting
+fixseg = list()
+for (i in 1:n) {  
+  start = data$t[idx[i,1]]
+  end   = data$t[idx[i,2]]
+  
+  fixseg[[i]] = fix[fix$start >= start & fix$end <= end, ]
+}
 
 # Plot all trials, raw data and fixations
 #my_xlim = c(-35, 25)
 #my_ylim = c(-20, 15)
 my_xlim = c(0, 770)
-my_ylim = c(-640, -250)
+my_ylim = c(-680, -250)
 
 par(mfcol=c(4,3))
-for (i in 1:n) {  
+for (i in 1:n) {
+  plot(fixseg[[i]]$x, fixseg[[i]]$y,
+       xlim=my_xlim, ylim=my_ylim,
+       xlab=NA, ylab=NA, pch=19,
+       cex=sqrt(fixseg[[i]][, 3] / 10^5), col='gray')
+  textxy(fixseg[[i]]$x, fixseg[[i]]$y, 1:length(fixseg[[i]]$x), cx=1)
+  par(new=TRUE)
+  plot(fixseg[[i]]$x, fixseg[[i]]$y,
+       xlim=my_xlim, ylim=my_ylim,
+       xlab=NA, ylab=NA, cex=1)
+  par(new=TRUE)
   plot(data$x[idx$start[i]:idx$end[i]],
        data$y[idx$start[i]:idx$end[i]],
        type="l", xlim=my_xlim,  ylim=my_ylim,
        xlab="Horizontal (px)", ylab="Vertical (px)")
-  par(new=TRUE)
-  plot(fix[[i]]$x, fix[[i]]$y, xlim=my_xlim, ylim=my_ylim, xlab=NA, ylab=NA)
+
 }
 
 # Plot single trial
 par(mfcol=c(1,1))
 nr = 1
+
+plot(fixseg[[nr]]$x, fixseg[[nr]]$y, xlim=my_xlim,  ylim=my_ylim, 
+     xlab=NA, ylab=NA, ,pch=19, cex=sqrt(fixseg[[nr]][, 3] / 10^5), col='gray')
+textxy(fixseg[[nr]]$x, fixseg[[nr]]$y, 1:length(fixseg[[nr]]$x), cx=1)
+par(new=TRUE)
+plot(fixseg[[nr]]$x, fixseg[[nr]]$y, xlim=my_xlim,  ylim=my_ylim, 
+     xlab=NA, ylab=NA, cex=1)
+par(new=TRUE)
 plot(data$x[idx$start[nr]:idx$end[nr]],
      data$y[idx$start[nr]:idx$end[nr]],  
      type="l", xlim=my_xlim,  ylim=my_ylim,
      xlab="Horizontal (px)", ylab="Vertical (px)")
-par(new=TRUE)
-plot(fix[[nr]]$x, fix[[nr]]$y, xlim=my_xlim,  ylim=my_ylim, 
-     xlab=NA, ylab=NA)
 
 # Plot stimuli
 # install.packages("jpeg")
