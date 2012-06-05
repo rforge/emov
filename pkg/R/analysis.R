@@ -62,13 +62,13 @@ for (i in 1:n) {
 #my_ylim = c(-20, 15)
 my_xlim = c(0, 770)
 my_ylim = c(-680, -250)
-
+c = sqrt(80/pi) # constant, r=1 corresponds to fixation duration of 50 ms.
 par(mfcol=c(4,3))
 for (i in 1:n) {
   plot(fixseg[[i]]$x, fixseg[[i]]$y,
        xlim=my_xlim, ylim=my_ylim,
        xlab=NA, ylab=NA, pch=19,
-       cex=sqrt(fixseg[[i]][, 3] / 10^5), col='gray')
+       cex=sqrt(fixseg[[i]][, 3] * 10^-3 * pi^-1) * c^-1, col='gray')
   textxy(fixseg[[i]]$x, fixseg[[i]]$y, 1:length(fixseg[[i]]$x), cx=1)
   par(new=TRUE)
   plot(fixseg[[i]]$x, fixseg[[i]]$y,
@@ -79,15 +79,15 @@ for (i in 1:n) {
        data$y[idx$start[i]:idx$end[i]],
        type="l", xlim=my_xlim,  ylim=my_ylim,
        xlab="Horizontal (px)", ylab="Vertical (px)")
-
 }
 
 # Plot single trial
 par(mfcol=c(1,1))
 nr = 1
-
 plot(fixseg[[nr]]$x, fixseg[[nr]]$y, xlim=my_xlim,  ylim=my_ylim, 
-     xlab=NA, ylab=NA, ,pch=19, cex=sqrt(fixseg[[nr]][, 3] / 10^5), col='gray')
+     xlab=NA, ylab=NA, pch=19,
+     cex=sqrt(fixseg[[nr]][, 3] * 10^-3 * pi^-1) * c^-1,
+     col='gray')
 textxy(fixseg[[nr]]$x, fixseg[[nr]]$y, 1:length(fixseg[[nr]]$x), cx=1)
 par(new=TRUE)
 plot(fixseg[[nr]]$x, fixseg[[nr]]$y, xlim=my_xlim,  ylim=my_ylim, 
