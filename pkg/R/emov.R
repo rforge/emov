@@ -3,10 +3,7 @@
 # Department of Psychitric Neurophysiology, University of Bern.
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-#' I-DT algorithm, adapted from: Salvucci, D. D., & Goldberg, J. H. (2000).
-#' Identifying fixations and saccades in eye-tracking protocols. In Proceedings
-#' of the 2000 symposium on eye tracking research & applications (pp. 71-78).
-#' New York: ACM.
+#' I-DT algorithm.
 #' 
 #' @param t Vector of timepoints.
 #' @param x horizontal eye position.
@@ -15,6 +12,11 @@
 #' @param duration Minimal fixation duration allowed.
 #' @return Fixations: position, start, end.
 #' @export
+#' @references
+#' Salvucci, D. D., & Goldberg, J. H. (2000).
+#' Identifying fixations and saccades in eye-tracking protocols. In Proceedings
+#' of the 2000 symposium on eye tracking research & applications (pp. 71-78).
+#' New York: ACM.
 #' @examples
 #' max_disp  = 19.0 # in cm, 28.8 cm (2 deg)
 #' min_dur =  80/1000*200 # 80ms / 200Hz
@@ -82,7 +84,7 @@ emov.idt <- function(t, x, y, dispersion, duration) {
   
 }
 
-#' Read SMI iview sample file
+#' Read SMI iview sample file.
 #' 
 #' @param file Filename.
 #' @param nr_of_headerlines No. of header lines in datafile.
@@ -96,7 +98,7 @@ emov.read_iviewsamples <- function(file, nr_of_headerlines) {
   
 }
 
-#' Convert Cartesian to Spherical coordinates
+#' Convert Cartesian to Spherical coordinates.
 #' 
 #' @param x x.
 #' @param y y.
