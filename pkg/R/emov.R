@@ -3,13 +3,22 @@
 # Department of Psychitric Neurophysiology, University of Bern.
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-
-# I-DT algorithm, adapted from: Salvucci, D. D., & Goldberg, J. H. (2000).
-# Identifying fixations and saccades in eye-tracking protocols. In Proceedings
-# of the 2000 symposium on eye tracking research & applications (pp. 71-78).
-# New York: ACM.
-
-# duration: nr of data points for minimal fix duration
+#' I-DT algorithm, adapted from: Salvucci, D. D., & Goldberg, J. H. (2000).
+#' Identifying fixations and saccades in eye-tracking protocols. In Proceedings
+#' of the 2000 symposium on eye tracking research & applications (pp. 71-78).
+#' New York: ACM.
+#' 
+#' @param t Vector of timepoints.
+#' @param x horizontal eye position.
+#' @param y vertical eye position.
+#' @param dispersion Maximal dispersion allowed.
+#' @param duration Minimal fixation duration allowed.
+#' @return Fixations: position, start, end.
+#' @export
+#' @examples
+#' max_disp  = 19.0 # in cm, 28.8 cm (2 deg)
+#' min_dur =  80/1000*200 # 80ms / 200Hz
+#' fix = emov.idt(data$t, data$x, data$y, max_disp, min_dur)
 emov.idt <- function(t, x, y, dispersion, duration) {
   
   # init variables
@@ -73,12 +82,29 @@ emov.idt <- function(t, x, y, dispersion, duration) {
   
 }
 
+#' Read SMI iview sample file
+#' 
+#' @param file Filename.
+#' @param nr_of_headerlines No. of header lines in datafile.
+#' @return data file.
+#' @export
+#' @examples
+#' data = emov.read_iviewsamples("~/Data/nscenes/natural_scenes_samples.txt", 46)
 emov.read_iviewsamples <- function(file, nr_of_headerlines) {
   
   return(read.table(file, header=TRUE, skip=nr_of_headerlines, sep="\t"))
   
 }
 
+#' Convert Cartesian to Spherical coordinates
+#' 
+#' @param x x.
+#' @param y y.
+#' @param z z.
+#' @return Two angles and radius-
+#' @export
+#' @examples
+#' data = emov.cart2sphere(data$L.GVEC.X, data$L.GVEC.Y, data$L.GVEC.Z)
 emov.cart2sphere <- function(x, y, z) {
   
   srootssxy = sqrt(abs(x)^2 + abs(y)^2)
@@ -90,6 +116,15 @@ emov.cart2sphere <- function(x, y, z) {
   
 }
 
+#' Velocity threshold filter.
+#' 
+#' @param x Eye position.
+#' @param y Eye position.
+#' @param threshold Velocity threshold.
+#' @return Filtered data.
+#' @export
+#' @examples
+#' flt = emov.filter(data$x, data$y, 10500/200)
 emov.filter <- function(x, y, threshold) {
   
   idx = diff(abs(x)) > threshold | diff(abs(y)) > threshold  
@@ -103,6 +138,12 @@ emov.filter <- function(x, y, threshold) {
   
 }
 
+#' Angular size of stimulus.
+#' 
+#' @param stimsize Size of the stimulus.
+#' @param distance Viewing distance from stimulus.
+#' @return Angular size in degrees.
+#' @export
 emov.angdia <- function(stimsize, distance) {
   
   return(deg(2*atan((0.5*stimsize)/distance)))
