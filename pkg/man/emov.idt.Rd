@@ -9,13 +9,13 @@ emov.idt(t, x, y, dispersion, duration)
 \arguments{
 \item{t}{Vector of timepoints.}
 
-\item{x}{horizontal eye position.}
+\item{x}{horizontal eye positions.}
 
-\item{y}{vertical eye position.}
+\item{y}{vertical eye positions.}
 
-\item{dispersion}{Maximal dispersion allowed.}
+\item{dispersion}{Maximal dispersion allowed (in units of x and y).}
 
-\item{duration}{Minimal fixation duration allowed.}
+\item{duration}{Minimal fixation duration allowed (in number of samples)}
 }
 \value{
 Fixations: position, start, end.
@@ -24,7 +24,7 @@ Fixations: position, start, end.
 I-DT algorithm.
 }
 \examples{
-max_disp  = 19.0 # in cm, 28.8 cm (2 deg)
+max_disp  = 2 # e.g. 2 cm
 min_dur =  80/1000*200 # 80ms / 200Hz
 fix = emov.idt(data$t, data$x, data$y, max_disp, min_dur)
 }

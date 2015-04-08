@@ -6,10 +6,10 @@
 #' I-DT algorithm.
 #' 
 #' @param t Vector of timepoints.
-#' @param x horizontal eye position.
-#' @param y vertical eye position.
-#' @param dispersion Maximal dispersion allowed.
-#' @param duration Minimal fixation duration allowed.
+#' @param x horizontal eye positions.
+#' @param y vertical eye positions.
+#' @param dispersion Maximal dispersion allowed (in units of x and y).
+#' @param duration Minimal fixation duration allowed (in number of samples)
 #' @return Fixations: position, start, end.
 #' @export
 #' @references
@@ -18,7 +18,7 @@
 #' of the 2000 symposium on eye tracking research & applications (pp. 71-78).
 #' New York: ACM.
 #' @examples
-#' max_disp  = 19.0 # in cm, 28.8 cm (2 deg)
+#' max_disp  = 2 # e.g. 2 cm
 #' min_dur =  80/1000*200 # 80ms / 200Hz
 #' fix = emov.idt(data$t, data$x, data$y, max_disp, min_dur)
 emov.idt <- function(t, x, y, dispersion, duration) {
@@ -148,6 +148,6 @@ emov.filter <- function(x, y, threshold) {
 #' @export
 emov.angdia <- function(stimsize, distance) {
   
-  return(deg(2*atan((0.5*stimsize)/distance)))
+  return(180*(2*atan((0.5*stimsize)/distance))/pi)
   
 }
