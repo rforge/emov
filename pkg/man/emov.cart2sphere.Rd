@@ -14,12 +14,12 @@ emov.cart2sphere(x, y, z)
 \item{z}{z.}
 }
 \value{
-Two angles and radius-
+Two angles (radians) and radius
 }
 \description{
 Convert Cartesian to Spherical coordinates.
 }
 \examples{
-data = emov.cart2sphere(data$L.GVEC.X, data$L.GVEC.Y, data$L.GVEC.Z)
+data = emov.cart2sphere(3, 4, 5)
 }
 

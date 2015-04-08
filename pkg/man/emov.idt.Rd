@@ -23,11 +23,6 @@ Fixations: position, start, end.
 \description{
 I-DT algorithm.
 }
-\examples{
-max_disp  = 2 # e.g. 2 cm
-min_dur =  80/1000*200 # 80ms / 200Hz
-fix = emov.idt(data$t, data$x, data$y, max_disp, min_dur)
-}
 \references{
 Salvucci, D. D., & Goldberg, J. H. (2000).
 Identifying fixations and saccades in eye-tracking protocols. In Proceedings

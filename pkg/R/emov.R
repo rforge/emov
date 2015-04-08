@@ -17,10 +17,6 @@
 #' Identifying fixations and saccades in eye-tracking protocols. In Proceedings
 #' of the 2000 symposium on eye tracking research & applications (pp. 71-78).
 #' New York: ACM.
-#' @examples
-#' max_disp  = 2 # e.g. 2 cm
-#' min_dur =  80/1000*200 # 80ms / 200Hz
-#' fix = emov.idt(data$t, data$x, data$y, max_disp, min_dur)
 emov.idt <- function(t, x, y, dispersion, duration) {
   
   # init variables
@@ -90,8 +86,6 @@ emov.idt <- function(t, x, y, dispersion, duration) {
 #' @param nr_of_headerlines No. of header lines in datafile.
 #' @return data file.
 #' @export
-#' @examples
-#' data = emov.read_iviewsamples("~/Data/nscenes/natural_scenes_samples.txt", 46)
 emov.read_iviewsamples <- function(file, nr_of_headerlines) {
   
   return(read.table(file, header=TRUE, skip=nr_of_headerlines, sep="\t"))
@@ -103,10 +97,10 @@ emov.read_iviewsamples <- function(file, nr_of_headerlines) {
 #' @param x x.
 #' @param y y.
 #' @param z z.
-#' @return Two angles and radius-
+#' @return Two angles (radians) and radius
 #' @export
 #' @examples
-#' data = emov.cart2sphere(data$L.GVEC.X, data$L.GVEC.Y, data$L.GVEC.Z)
+#' data = emov.cart2sphere(3, 4, 5)
 emov.cart2sphere <- function(x, y, z) {
   
   srootssxy = sqrt(abs(x)^2 + abs(y)^2)
@@ -125,8 +119,6 @@ emov.cart2sphere <- function(x, y, z) {
 #' @param threshold Velocity threshold.
 #' @return Filtered data.
 #' @export
-#' @examples
-#' flt = emov.filter(data$x, data$y, 10500/200)
 emov.filter <- function(x, y, threshold) {
   
   idx = diff(abs(x)) > threshold | diff(abs(y)) > threshold  

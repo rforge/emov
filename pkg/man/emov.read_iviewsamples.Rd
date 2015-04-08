@@ -17,7 +17,4 @@ data file.
 \description{
 Read SMI iview sample file.
 }
-\examples{
-data = emov.read_iviewsamples("~/Data/nscenes/natural_scenes_samples.txt", 46)
-}
 

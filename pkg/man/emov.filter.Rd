@@ -19,7 +19,4 @@ Filtered data.
 \description{
 Velocity threshold filter.
 }
-\examples{
-flt = emov.filter(data$x, data$y, 10500/200)
-}
 
